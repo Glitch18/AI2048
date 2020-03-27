@@ -41,6 +41,8 @@ class GameState:
             self.moveDown()
 
         FPSCLOCK.tick(FPS)
+        done = True if len(free)==0 else False
+        return done
 
     def user_Play(self):
         self.frame_step([0,0,0,0])
