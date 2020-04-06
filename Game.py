@@ -4,7 +4,6 @@ import random
 import time
 
 # TODO: Already Increased
-# TODO: Implement GameOver
 
 pygame.init()
 screen = pygame.display.set_mode((400,400))
@@ -41,7 +40,7 @@ class GameState:
             self.moveDown()
 
         FPSCLOCK.tick(FPS)
-        done = True if len(free)==0 else False
+        done = True if len(self.free)==0 else False
         return done
 
     def user_Play(self):
@@ -54,19 +53,19 @@ class GameState:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         pygame.quit()
-                        running=False
+                        self.running=False
                     if event.key == pygame.K_LEFT:
                         action = [1,0,0,0]
-                        self.frame_step(action)
+                        self.running = 1-self.frame_step(action)
                     if event.key == pygame.K_RIGHT:
                         action = [0,0,1,0]
-                        self.frame_step(action)
+                        self.running = 1-self.frame_step(action)
                     if event.key == pygame.K_UP:
                         action = [0,1,0,0]
-                        self.frame_step(action)
+                        self.runnning = 1-self.frame_step(action)
                     if event.key == pygame.K_DOWN:
                         action = [0,0,0,1]
-                        self.frame_step(action)
+                        self.running = 1-self.frame_step(action)
 
     def makeFree(self):
         for i in range(4):
