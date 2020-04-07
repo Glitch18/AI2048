@@ -1,8 +1,7 @@
 #!usr/bin/env python3
-from Game import GameState
 from tensorflow import keras
-import tensorflow as tf
 import numpy as np
+import os
 
 class ReplayBuffer:
     def __init__(self,max_size,input_shape,n_actions):
@@ -46,8 +45,9 @@ class DQNAgent:
         self.epsillon_end = epsillon_end
         self.batch_size = batch_size
         self.model_file = fname
-        self.model = create_model(alpha,fc_1,fc_2,input_dims,n_actions)
+        self.model = if os.path.exists(fname) load_model() else create_model(alpha,fc_1,fc_2,input_dims,n_actions)
         self.memory = ReplayBuffer(mem_size,input_dims,n_actions)
+
 
     def create_model(self,alpha,fc_1,fc_2,input_dims,n_actions):
         model = keras.Sequential([
@@ -105,5 +105,3 @@ class DQNAgent:
 
     def load_model(self):
         self.model = keras.models.load_model(self.model_file)
-
-    
