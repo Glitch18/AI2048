@@ -87,7 +87,7 @@ class GameState:
                 if(self.grid[i][j]==0):
                     self.free.append((i,j))
 
-    def printScreen(self):
+    def printScreen(self): #prints to display
         screen.fill((0,0,0))
         x,y = 4,4
         for i in range(4):
@@ -100,7 +100,7 @@ class GameState:
             y += 99
         pygame.display.update()
 
-    def gridPrint(self):
+    def gridPrint(self): #prints to terminal
         #os.system('clear')
         print(self.grid[0])
         print(self.grid[1])
@@ -115,14 +115,14 @@ class GameState:
         self.free.remove(chosen)
 
     def moveLeft(self):
-        print("------Moving LEFT------")
-        self.gridPrint()
+        #print("------Moving LEFT------")
+        #self.gridPrint()
         flag=0
         for i in range(4):
-            print("Left "+str(i))
-            self.gridPrint()
+            #print("Left "+str(i))
+            #self.gridPrint()
             for j in range(4):
-                print("------"+str(j)+"-----"+str(self.grid[i][j]))
+                #print("------"+str(j)+"-----"+str(self.grid[i][j]))
                 if(self.grid[i][j]==0):
                     continue
                 elif(j!=0):
@@ -137,25 +137,25 @@ class GameState:
                         continue
                     elif(x!=j-1):
                         self.grid[i][x+1]=self.grid[i][j]
-                        self.gridPrint()
+                        #self.gridPrint()
                         self.free.remove((i,x+1))
                         self.grid[i][j]=0
-                        self.gridPrint()
+                        #self.gridPrint()
                         self.free.append((i,j))
                         flag=1
-                        print("".join(str(_) for _ in self.free if _[0]==i))
+                        #print("".join(str(_) for _ in self.free if _[0]==i))
         if flag:
             self.spawn()
         self.printScreen()
 
     def moveRight(self):
-        print("------Moving Right----")
-        self.gridPrint()
+        #print("------Moving Right----")
+        #self.gridPrint()
         flag=0
         for i in range(4):
-            print("Right "+str(i))
+            #print("Right "+str(i))
             for j in range(3,-1,-1):
-                print("------"+str(j)+"-----"+str(self.grid[i][j]))
+                #print("------"+str(j)+"-----"+str(self.grid[i][j]))
                 if(self.grid[i][j]==0):
                     continue
                 elif(j!=3):
@@ -173,23 +173,23 @@ class GameState:
                         self.grid[i][j]=0
                         self.free.append((i,j))
                         flag=1
-                        print("".join(str(_) for _ in self.free if _[0]==i))
+                        #print("".join(str(_) for _ in self.free if _[0]==i))
         if flag:
             self.spawn()
         self.printScreen()
 
     def moveUp(self):
-        print("-------Moving up--------")
-        self.gridPrint()
+        #print("-------Moving up--------")
+        #self.gridPrint()
         self.grid = [list(x) for x in zip(*self.grid)]
-        print("TRANSPOSE-")
-        self.gridPrint()
+        #print("TRANSPOSE-")
+        #self.gridPrint()
         flag=0
         for i in range(4):
-            print("LEFT "+str(i))
-            self.gridPrint()
+            #print("LEFT "+str(i))
+            #self.gridPrint()
             for j in range(4):
-                print("------"+str(j)+"-----"+str(self.grid[i][j]))
+                #print("------"+str(j)+"-----"+str(self.grid[i][j]))
                 if(self.grid[i][j]==0):
                     continue
                 elif(j!=0):
@@ -204,13 +204,13 @@ class GameState:
                         continue
                     elif(x!=j-1):
                         self.grid[i][x+1]=self.grid[i][j]
-                        self.gridPrint()
+                        #self.gridPrint()
                         self.free.remove((x+1,i))
                         self.grid[i][j]=0
-                        self.gridPrint()
+                        #self.gridPrint()
                         self.free.append((j,i))
                         flag=1
-                        print("".join(str(_) for _ in self.free if _[0]==i))
+                        #print("".join(str(_) for _ in self.free if _[0]==i))
         self.grid = [list(x) for x in zip(*self.grid)]
         self.grid = np.array(self.grid)
         if flag:
@@ -218,17 +218,17 @@ class GameState:
         self.printScreen()
 
     def moveDown(self):
-        print("---------GOING DOWNNN---------")
-        self.gridPrint()
+        #print("---------GOING DOWNNN---------")
+        #self.gridPrint()
         self.grid = [list(x) for x in zip(*self.grid)]
-        print("TRANSPOSE-")
-        self.gridPrint()
+        #print("TRANSPOSE-")
+        #self.gridPrint()
         flag=0
         for i in range(4):
-            print("RIGHT "+str(i))
-            self.gridPrint()
+            #print("RIGHT "+str(i))
+            #self.gridPrint()
             for j in range(3,-1,-1):
-                print("------"+str(j)+"-----"+str(self.grid[i][j]))
+                #print("------"+str(j)+"-----"+str(self.grid[i][j]))
                 if(self.grid[i][j]==0):
                     continue
                 elif(j!=3):
@@ -242,13 +242,13 @@ class GameState:
                         flag=1
                     elif(x!=j+1):
                         self.grid[i][x-1]=self.grid[i][j]
-                        self.gridPrint()
+                        #self.gridPrint()
                         self.free.remove((x-1,i))
                         self.grid[i][j]=0
-                        self.gridPrint()
+                        #self.gridPrint()
                         self.free.append((j,i))
                         flag=1
-                        print("".join(str(_) for _ in self.free if _[0]==i))
+                        #print("".join(str(_) for _ in self.free if _[0]==i))
         self.grid = [list(x) for x in zip(*self.grid)]
         self.grid = np.array(self.grid)
         if flag:
