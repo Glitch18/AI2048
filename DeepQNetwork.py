@@ -10,7 +10,7 @@ class ReplayBuffer:
         self.new_state_memory = np.zeros((self.mem_size,input_shape))
         self.action_memory = np.zeros((self.mem_size,n_actions))
         self.reward_memory = np.zeros(self.mem_size)
-        self.terminal_memory = np.zeros(np.mem_size,dtype=np.float32)
+        self.terminal_memory = np.zeros(self.mem_size,dtype=np.float32)
         self.mem_counter = 0
 
     def store_transition(self, state, new_state,action, reward, done):
@@ -26,7 +26,7 @@ class ReplayBuffer:
     def get_batch_sample(self, batch_size):
         size = min(self.mem_counter,self.mem_size)
         batch = np.random.choice(size,batch_size)
-        sates = self.state_memory[batch]
+        states = self.state_memory[batch]
         n_states = self.new_state_memory[batch]
         rewards = self.reward_memory[batch]
         terminals = self.terminal_memory[batch]
@@ -45,7 +45,7 @@ class DQNAgent:
         self.epsillon_end = epsillon_end
         self.batch_size = batch_size
         self.model_file = fname
-        self.model = if os.path.exists(fname) load_model() else create_model(alpha,fc_1,fc_2,input_dims,n_actions)
+        self.model = load_model() if os.path.exists(fname) else self.create_model(alpha,fc_1,fc_2,input_dims,n_actions)
         self.memory = ReplayBuffer(mem_size,input_dims,n_actions)
 
 
@@ -92,8 +92,7 @@ class DQNAgent:
 
         batch_index = np.arange(self.batch_size,dtype=np.int32)
 
-        q_target[batch_index,action_indices] = rewards + \
-                                    self.gamma*np.max(q_next,axis=1)*done
+        q_target[batch_index,action_indices] = rewards + self.gamma*np.max(q_next,axis=1)*done
 
         _ = self.model.fit(states, q_target, verbose=0)
 
