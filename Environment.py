@@ -2,6 +2,7 @@
 import pygame
 import random
 import time
+import numpy as np
 
 # TODO: Already Increased
 
@@ -16,15 +17,27 @@ class GameState:
         random.seed(int(time.clock_gettime(time.CLOCK_REALTIME)))
         self.tiles = {0:'Blank.jpg', 2:'2.jpg', 4:'4.jpg', 8:'8.jpg', 16:'16.jpg', 32:'32.jpg', 64:'64.jpg', 128:'128.jpg', 256:'256.jpg', 512:'512.jpg', 1024:'1024.jpg', 2048:'2048.jpg'}
         self.free = []
-        self.running = True
         self.grid = [0]*4
         self.grid = [self.grid[::] for x in range(4)]
+        self.grid = np.array(self.grid)
         self.makeFree()
         self.spawn()
         self.spawn()
 
+    def reset(self):
+        self.free = []
+        self.grid = [0]*4
+        self.grid = [self.grid[::] for x in range(4)]
+        self.grid = np.array(self.grid)
+        self.makeFree()
+        self.spawn()
+        self.spawn()
+        return self.grid.flatten()
+
     def frame_step(self,input_actions):
         pygame.event.pump()
+
+        reward = np.sum(self.grid.flatten())
 
         if sum(input_actions) == 0:
             self.printScreen() #Do Nothing
@@ -41,11 +54,12 @@ class GameState:
 
         FPSCLOCK.tick(FPS)
         done = True if len(self.free)==0 else False
-        return done
+        return self.grid.flatten(),self.grid.flatten().max()/(16-len(self.free)),done #state,reward,done
 
     def user_Play(self):
         self.frame_step([0,0,0,0])
-        while self.running:
+        running = True
+        while running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -53,19 +67,19 @@ class GameState:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         pygame.quit()
-                        self.running=False
+                        running=False
                     if event.key == pygame.K_LEFT:
                         action = [1,0,0,0]
-                        self.running = 1-self.frame_step(action)
+                        running = 1-self.frame_step(action)[2]
                     if event.key == pygame.K_RIGHT:
                         action = [0,0,1,0]
-                        self.running = 1-self.frame_step(action)
+                        running = 1-self.frame_step(action)[2]
                     if event.key == pygame.K_UP:
                         action = [0,1,0,0]
-                        self.runnning = 1-self.frame_step(action)
+                        runnning = 1-self.frame_step(action)[2]
                     if event.key == pygame.K_DOWN:
                         action = [0,0,0,1]
-                        self.running = 1-self.frame_step(action)
+                        running = 1-self.frame_step(action)[2]
 
     def makeFree(self):
         for i in range(4):
@@ -198,6 +212,7 @@ class GameState:
                         flag=1
                         print("".join(str(_) for _ in self.free if _[0]==i))
         self.grid = [list(x) for x in zip(*self.grid)]
+        self.grid = np.array(self.grid)
         if flag:
             self.spawn()
         self.printScreen()
@@ -235,6 +250,7 @@ class GameState:
                         flag=1
                         print("".join(str(_) for _ in self.free if _[0]==i))
         self.grid = [list(x) for x in zip(*self.grid)]
+        self.grid = np.array(self.grid)
         if flag:
             self.spawn()
         self.printScreen()
