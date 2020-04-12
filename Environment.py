@@ -54,7 +54,8 @@ class GameState:
 
         FPSCLOCK.tick(FPS)
         done = True if len(self.free)==0 else False
-        return self.grid.flatten(),self.grid.flatten().max()/(16-len(self.free)),done #state,reward,done
+        #return self.grid.flatten(),self.grid.flatten().max()/(16-len(self.free)),done #state,reward,done
+        return self.grid.flatten(),np.sum(self.grid.flatten()),done #state,reward,done
 
     def user_Play(self):
         self.frame_step([0,0,0,0])
