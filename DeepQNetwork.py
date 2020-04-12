@@ -45,7 +45,7 @@ class DQNAgent:
         self.epsillon_end = epsillon_end
         self.batch_size = batch_size
         self.model_file = fname
-        self.model = load_model() if os.path.exists(fname) else self.create_model(alpha,fc_1,fc_2,input_dims,n_actions)
+        self.model = self.load_model() if os.path.exists(fname) else self.create_model(alpha,fc_1,fc_2,input_dims,n_actions)
         self.memory = ReplayBuffer(mem_size,input_dims,n_actions)
 
 
